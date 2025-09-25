@@ -1,3 +1,4 @@
+import Books from "./books";
 import Navbar from "./navbar";
 
 const Home = () => {
@@ -5,6 +6,7 @@ const Home = () => {
     <div>
       {/* <h1>Home</h1> */}
       <Navbar />
+      <Books />
     </div>
   );
 };
