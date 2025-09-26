@@ -46,6 +46,10 @@ export const lmsApi = createApi({
       }),
       invalidatesTags: ["borrow", "books"],
     }),
+    borrowSummary: builder.query({
+      query: () => "borrow",
+      providesTags: ["borrow"],
+    }),
   }),
 });
 
@@ -56,4 +60,5 @@ export const {
   useUpdateBookMutation,
   useDeleteBookMutation,
   useBorrowBookMutation,
+  useBorrowSummaryQuery,
 } = lmsApi;

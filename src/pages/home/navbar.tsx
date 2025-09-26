@@ -17,7 +17,7 @@ export default function Navbar() {
       <NavigationMenu className="ml-auto items-end justify-self-end">
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuLink href="#">All Books</NavigationMenuLink>
+            <NavigationMenuLink href="/books">All Books</NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
             <NavigationMenuLink
@@ -31,7 +31,9 @@ export default function Navbar() {
             </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuLink href="#">Books Summary</NavigationMenuLink>
+            <NavigationMenuLink href="/borrow-summary">
+              Books Summary
+            </NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
