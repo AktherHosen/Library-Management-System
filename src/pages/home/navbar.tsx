@@ -1,13 +1,15 @@
+import { AddBooks } from "@/components/home/add-books"
 import {
   NavigationMenu,
   NavigationMenuList,
   NavigationMenuItem,
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu"
-
+import { useState } from "react"
 export default function Navbar() {
+  const [openAddBook, setOpenAddBook] = useState(false)
   return (
-    <div className="flex items-center justify-between border-b  py-4">
+    <div className="flex items-center justify-between border-b border-border  py-4">
       {/* Logo */}
       <h4 className="text-xl font-bold">Bookify</h4>
 
@@ -18,13 +20,22 @@ export default function Navbar() {
             <NavigationMenuLink href="#">All Books</NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuLink href="#">Add Books</NavigationMenuLink>
+            <NavigationMenuLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault()
+                setOpenAddBook(true)
+              }}
+            >
+              Add Books
+            </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
             <NavigationMenuLink href="#">Books Summary</NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
+       <AddBooks open={openAddBook} onOpenChange={setOpenAddBook} />
     </div>
   )
 }
