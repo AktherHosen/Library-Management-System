@@ -1,13 +1,13 @@
-import { AddBooks } from "@/components/home/add-books"
+import { AddBook } from "@/components/home/add-book";
 import {
   NavigationMenu,
-  NavigationMenuList,
   NavigationMenuItem,
   NavigationMenuLink,
-} from "@/components/ui/navigation-menu"
-import { useState } from "react"
+  NavigationMenuList,
+} from "@/components/ui/navigation-menu";
+import { useState } from "react";
 export default function Navbar() {
-  const [openAddBook, setOpenAddBook] = useState(false)
+  const [openAddBook, setOpenAddBook] = useState(false);
   return (
     <div className="flex items-center justify-between border-b border-border  py-4">
       {/* Logo */}
@@ -23,8 +23,8 @@ export default function Navbar() {
             <NavigationMenuLink
               href="#"
               onClick={(e) => {
-                e.preventDefault()
-                setOpenAddBook(true)
+                e.preventDefault();
+                setOpenAddBook(true);
               }}
             >
               Add Books
@@ -35,7 +35,7 @@ export default function Navbar() {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
-       <AddBooks open={openAddBook} onOpenChange={setOpenAddBook} />
+      <AddBook open={openAddBook} onOpenChange={setOpenAddBook} />
     </div>
-  )
+  );
 }
