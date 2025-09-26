@@ -1,16 +1,30 @@
-const Navbar = () => {
-  return (
-    <div className="flex justify-between items-center py-4 border-b">
-      <h4>Bookify</h4>
-      <div>
-        <ul className="flex items-center gap-2">
-          <li>All Books</li>
-          <li>Add Books</li>
-          <li>Books Summary</li>
-        </ul>
-      </div>
-    </div>
-  );
-};
+import {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuLink,
+} from "@/components/ui/navigation-menu"
 
-export default Navbar;
+export default function Navbar() {
+  return (
+    <div className="flex items-center justify-between border-b  py-4">
+      {/* Logo */}
+      <h4 className="text-xl font-bold">Bookify</h4>
+
+      {/* Navigation aligned right */}
+      <NavigationMenu className="ml-auto items-end justify-self-end">
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuLink href="#">All Books</NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink href="#">Add Books</NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink href="#">Books Summary</NavigationMenuLink>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
+    </div>
+  )
+}
