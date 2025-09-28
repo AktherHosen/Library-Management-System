@@ -16,11 +16,14 @@ export const lmsApi = createApi({
       invalidatesTags: ["books"],
     }),
     getAllBooks: builder.query({
-      query: () => "/books",
+      query: ({ page = 1, limit = 8 } = {}) => ({
+        url: "/books",
+        params: { page, limit },
+      }),
       providesTags: ["books"],
     }),
     getSingleBook: builder.query({
-      query: (Id) => `/book/${Id}`,
+      query: (id) => `/books/${id}`,
       providesTags: ["books"],
     }),
     updateBook: builder.mutation({
@@ -47,7 +50,10 @@ export const lmsApi = createApi({
       invalidatesTags: ["borrow", "books"],
     }),
     borrowSummary: builder.query({
-      query: () => "borrow",
+      query: ({ page = 1, limit = 8 } = {}) => ({
+        url: "/borrow",
+        params: { page, limit },
+      }),
       providesTags: ["borrow"],
     }),
   }),

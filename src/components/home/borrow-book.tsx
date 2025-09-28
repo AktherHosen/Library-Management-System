@@ -8,7 +8,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useBorrowBookMutation } from "@/redux/api/lmsApi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
 type BorrowBookProps = {
@@ -23,6 +24,13 @@ export function BorrowBook({ open, onOpenChange, book }: BorrowBookProps) {
     dueDate: "",
   });
   const [borrowBook, { isLoading }] = useBorrowBookMutation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (open) {
+      setFormData({ quantity: 1, dueDate: "" });
+    }
+  }, [open, book]);
 
   const handleChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -31,8 +39,18 @@ export function BorrowBook({ open, onOpenChange, book }: BorrowBookProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (formData.quantity < 1) {
+      toast.error("Quantity must be at least 1!");
+      return;
+    }
+
     if (formData.quantity > book.copies) {
-      toast.error("Quantity cannot exceed available copies!");
+      toast.error(`Cannot borrow more than ${book.copies} copies!`);
+      return;
+    }
+
+    if (!formData.dueDate) {
+      toast.error("Please select a due date!");
       return;
     }
 
@@ -43,13 +61,12 @@ export function BorrowBook({ open, onOpenChange, book }: BorrowBookProps) {
         dueDate: formData.dueDate,
       }).unwrap();
 
-      toast.success("Book borrowed successfully!");
-
+      toast.success(`Successfully borrowed ${formData.quantity} copies!`);
+      navigate("/borrow-summary");
       onOpenChange(false);
-      //   router.push("/borrow-summary"); // redirect to summary page
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      toast.error("Failed to borrow book.");
+      toast.error(error?.data?.message || "Failed to borrow book.");
     }
   };
 
@@ -57,13 +74,13 @@ export function BorrowBook({ open, onOpenChange, book }: BorrowBookProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Borrow {book.title}</DialogTitle>
+          <DialogTitle>Borrow "{book.title}"</DialogTitle>
           <DialogDescription>
             Borrow this book by selecting quantity and due date.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <Input
             type="number"
             placeholder="Quantity"
@@ -85,6 +102,10 @@ export function BorrowBook({ open, onOpenChange, book }: BorrowBookProps) {
             {isLoading ? "Processing..." : "Confirm Borrow"}
           </Button>
         </form>
+
+        <p className="mt-2 text-sm text-muted-foreground">
+          Available copies: {book.copies}
+        </p>
       </DialogContent>
     </Dialog>
   );

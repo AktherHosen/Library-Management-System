@@ -1,3 +1,5 @@
+import { Limit } from "@/components/common/limit";
+import { Paginations } from "@/components/common/paginations";
 import { Loader } from "@/components/ui/loader";
 import { SectionTitle } from "@/components/ui/section-title";
 import {
@@ -9,35 +11,49 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useBorrowSummaryQuery } from "@/redux/api/lmsApi";
+import { useState } from "react";
 
-// TypeScript interface
 interface BorrowSummaryItem {
   bookId: string;
   totalQuantity: number;
   book: {
     title: string;
     isbn: string;
-    author?: string;
   };
 }
 
 interface BorrowSummaryResponse {
   success: boolean;
   data: BorrowSummaryItem[];
+  pagination: {
+    page: number;
+    limit: number;
+    totalPages: number;
+    total: number;
+  };
 }
 
 const BorrowSummary = () => {
-  const { data, isLoading, error } = useBorrowSummaryQuery<
-    void,
-    BorrowSummaryResponse
-  >(undefined);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(4);
+
+  const { data, isLoading, error } = useBorrowSummaryQuery({ page, limit });
 
   return (
-    <div className="space-y-6">
-      <SectionTitle
-        title="Borrow Summary"
-        subtitle="All borrowed books and their total quantities"
-      />
+    <div>
+      <div className="flex justify-between items-center">
+        <SectionTitle
+          title="Borrow Summary"
+          subtitle="All borrowed books and their total quantities"
+        />
+        <Limit
+          limit={limit}
+          onChange={(newLimit) => {
+            setLimit(newLimit);
+            setPage(1);
+          }}
+        />
+      </div>
 
       <div className="overflow-x-auto rounded-2xl border border-border shadow-sm">
         <Table className="w-full min-w-[600px]">
@@ -67,7 +83,7 @@ const BorrowSummary = () => {
                   Failed to load summary.
                 </TableCell>
               </TableRow>
-            ) : data?.data?.length === 0 ? (
+            ) : data?.data.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={3}
@@ -92,6 +108,16 @@ const BorrowSummary = () => {
             )}
           </TableBody>
         </Table>
+      </div>
+
+      <div className="flex justify-self-end  my-4">
+        {data?.pagination && (
+          <Paginations
+            page={page}
+            totalPages={data.pagination.totalPages}
+            onPageChange={setPage}
+          />
+        )}
       </div>
     </div>
   );

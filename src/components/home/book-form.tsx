@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -42,22 +43,32 @@ export function BookForm({ initialData, onSubmit, isLoading }: any) {
         onChange={(e) => handleChange("author", e.target.value)}
         required
       />
-      <Select
-        value={formData.genre}
-        onValueChange={(value) => handleChange("genre", value)}
-      >
-        <SelectTrigger>
-          <SelectValue placeholder="Select Genre" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="FICTION">Fiction</SelectItem>
-          <SelectItem value="NON_FICTION">Non Fiction</SelectItem>
-          <SelectItem value="SCIENCE">Science</SelectItem>
-          <SelectItem value="HISTORY">History</SelectItem>
-          <SelectItem value="BIOGRAPHY">Biography</SelectItem>
-          <SelectItem value="FANTASY">Fantasy</SelectItem>
-        </SelectContent>
-      </Select>
+      <div className="flex justify-between items-center gap-4">
+        <Select
+          value={formData.genre}
+          onValueChange={(value) => handleChange("genre", value)}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select Genre" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="FICTION">Fiction</SelectItem>
+            <SelectItem value="NON_FICTION">Non Fiction</SelectItem>
+            <SelectItem value="SCIENCE">Science</SelectItem>
+            <SelectItem value="HISTORY">History</SelectItem>
+            <SelectItem value="BIOGRAPHY">Biography</SelectItem>
+            <SelectItem value="FANTASY">Fantasy</SelectItem>
+          </SelectContent>
+        </Select>
+        <Input
+          type="number"
+          placeholder="Copies"
+          value={formData.copies}
+          onChange={(e) => handleChange("copies", Number(e.target.value))}
+          min={1}
+          required
+        />
+      </div>
       <Input
         type="text"
         placeholder="ISBN"
@@ -70,23 +81,15 @@ export function BookForm({ initialData, onSubmit, isLoading }: any) {
         onChange={(e) => handleChange("description", e.target.value)}
         rows={3}
       />
-      <Input
-        type="number"
-        placeholder="Copies"
-        value={formData.copies}
-        onChange={(e) => handleChange("copies", Number(e.target.value))}
-        min={1}
-        required
-      />
-      <label className="flex items-center space-x-2">
-        <input
-          type="checkbox"
+
+      <div className="flex items-center space-x-2">
+        <Checkbox
           checked={formData.available}
-          onChange={(e) => handleChange("available", e.target.checked)}
-          className="h-4 w-4"
+          onCheckedChange={(checked) => handleChange("available", checked)}
         />
         <span>Available</span>
-      </label>
+      </div>
+
       <Button type="submit" disabled={isLoading} className="w-full">
         {isLoading ? "Saving..." : "Save"}
       </Button>

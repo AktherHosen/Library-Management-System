@@ -5,15 +5,21 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
+import { BookOpen } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router";
 export default function Navbar() {
   const [openAddBook, setOpenAddBook] = useState(false);
   return (
-    <div className="flex items-center justify-between border-b border-border  py-4">
-      {/* Logo */}
-      <h4 className="text-xl font-bold">Bookify</h4>
+    <div className="flex items-center justify-between border-b border-border  py-4 mb-8">
+      <Link
+        to="/"
+        className="text-xl uppercase font-bold text-primary flex items-center"
+      >
+        <BookOpen className="mr-2" />
+        Campus Library
+      </Link>
 
-      {/* Navigation aligned right */}
       <NavigationMenu className="ml-auto items-end justify-self-end">
         <NavigationMenuList>
           <NavigationMenuItem>
