@@ -22,8 +22,7 @@ export default function Navbar() {
   ];
 
   return (
-    <div className="flex items-center justify-between py-4 px-4 mb-8 border-b border-gray-200">
-      {/* Logo */}
+    <div className="flex items-center justify-between py-4  mb-8 border-b border-gray-200">
       <Link
         to="/"
         className="text-xl uppercase font-bold text-primary flex items-center"
@@ -32,7 +31,6 @@ export default function Navbar() {
         Campus Library
       </Link>
 
-      {/* Desktop Navigation */}
       <div className="hidden md:flex ml-auto">
         <NavigationMenu>
           <NavigationMenuList>
@@ -59,7 +57,6 @@ export default function Navbar() {
         </NavigationMenu>
       </div>
 
-      {/* Mobile Hamburger */}
       <div className="md:hidden">
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger asChild>
@@ -93,7 +90,6 @@ export default function Navbar() {
         </Sheet>
       </div>
 
-      {/* Add Book Modal */}
       <AddBook open={openAddBook} onOpenChange={setOpenAddBook} />
     </div>
   );
