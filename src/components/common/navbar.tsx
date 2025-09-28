@@ -11,7 +11,7 @@ import { Link } from "react-router";
 export default function Navbar() {
   const [openAddBook, setOpenAddBook] = useState(false);
   return (
-    <div className="flex items-center justify-between border-b border-border  py-4 mb-8">
+    <div className="flex items-center justify-between py-4 mb-8">
       <Link
         to="/"
         className="text-xl uppercase font-bold text-primary flex items-center"

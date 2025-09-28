@@ -8,8 +8,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Loader } from "@/components/ui/loader";
+import { SectionTitle } from "@/components/ui/section-title";
 import { useGetAllBooksQuery } from "@/redux/api/lmsApi";
-import { Link } from "react-router-dom"; // make sure using react-router-dom
+import { Link } from "react-router-dom";
 
 export function FeaturedBooks() {
   const { data, isLoading } = useGetAllBooksQuery({ page: 1, limit: 4 });
@@ -17,8 +18,12 @@ export function FeaturedBooks() {
   if (isLoading) return <Loader />;
 
   return (
-    <section className="my-16 max-w-7xl mx-auto px-6">
-      <h2 className="text-3xl font-bold mb-6">Featured Books</h2>
+    <section className="">
+      <SectionTitle
+        title="Featured Books"
+        subtitle="Check out some of our popular books"
+        className="mb-6"
+      />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
         {data?.data?.map((book: any) => (
