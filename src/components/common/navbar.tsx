@@ -22,7 +22,7 @@ export default function Navbar() {
   ];
 
   return (
-    <div className="flex items-center justify-between py-4  mb-8 border-b border-gray-200">
+    <div className="flex items-center justify-between py-4  mb-8 ">
       <Link
         to="/"
         className="text-xl uppercase font-bold text-primary flex items-center"

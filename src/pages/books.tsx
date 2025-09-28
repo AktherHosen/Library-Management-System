@@ -132,7 +132,6 @@ const Books = () => {
                     </Badge>
                   </CardContent>
 
-                  {/* Actions with ShadCN Buttons */}
                   <CardFooter className="flex flex-wrap gap-2  border-t border-gray-100">
                     <Button
                       asChild
@@ -181,7 +180,6 @@ const Books = () => {
         </div>
       </section>
 
-      {/* 🔹 Modals */}
       {editingBook && (
         <EditBook
           open={!!editingBook}

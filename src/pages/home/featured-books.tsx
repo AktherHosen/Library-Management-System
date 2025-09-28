@@ -1,19 +1,47 @@
+import { BorrowBook } from "@/components/home/borrow-book";
+import { EditBook } from "@/components/home/edit-book";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Loader } from "@/components/ui/loader";
 import { SectionTitle } from "@/components/ui/section-title";
-import { useGetAllBooksQuery } from "@/redux/api/lmsApi";
+import { useDeleteBookMutation, useGetAllBooksQuery } from "@/redux/api/lmsApi";
+import { BookOpen, Edit, Info, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 export function FeaturedBooks() {
   const { data, isLoading } = useGetAllBooksQuery({ page: 1, limit: 4 });
+  const [deleteBook] = useDeleteBookMutation();
+  const [editingBook, setEditingBook] = useState<any | null>(null);
+  const [borrowingBook, setBorrowingBook] = useState<any | null>(null);
+  const handleDelete = (id: string) => {
+    toast.warning("Are you sure you want to delete this book?", {
+      action: {
+        label: "Delete",
+        onClick: async () => {
+          try {
+            await deleteBook(id).unwrap();
+            toast.success("Book deleted successfully!");
+          } catch (err) {
+            toast.error("Failed to delete book");
+            console.error(err);
+          }
+        },
+      },
+      cancel: {
+        label: "Cancel",
+      },
+    });
+  };
 
   if (isLoading) return <Loader />;
 
@@ -43,7 +71,12 @@ export function FeaturedBooks() {
                   {book.description || "No description available."}
                 </CardDescription>
                 <div className="flex justify-between items-center mt-2">
-                  <p className="text-sm text-gray-500">{book.author}</p>
+                  <div className="flex flex-col">
+                    <p className="text-sm text-gray-500">{book.author}</p>
+                    {book.isbn && (
+                      <p className="text-xs text-gray-400">ISBN: {book.isbn}</p>
+                    )}
+                  </div>
                   <Badge
                     variant={book.copies > 0 ? "secondary" : "destructive"}
                     className="text-xs px-2 py-1"
@@ -52,6 +85,40 @@ export function FeaturedBooks() {
                   </Badge>
                 </div>
               </CardContent>
+
+              <CardFooter className="flex flex-wrap gap-2  border-t border-gray-100">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="flex-1 justify-center gap-2"
+                >
+                  <Link to={`/books/${book._id}`}>
+                    <Info size={16} /> Details
+                  </Link>
+                </Button>
+                <Button
+                  onClick={() => setEditingBook(book)}
+                  variant="secondary"
+                  className="flex-1 justify-center gap-2"
+                >
+                  <Edit size={16} /> Edit
+                </Button>
+                <Button
+                  onClick={() => handleDelete(book._id)}
+                  variant="destructive"
+                  className="flex-1 justify-center gap-2"
+                >
+                  <Trash2 size={16} /> Delete
+                </Button>
+                <Button
+                  disabled={book.copies === 0}
+                  onClick={() => setBorrowingBook(book)}
+                  variant="default"
+                  className="flex-1 justify-center gap-2"
+                >
+                  <BookOpen size={16} /> Borrow
+                </Button>
+              </CardFooter>
             </Card>
           </Link>
         ))}
@@ -65,6 +132,21 @@ export function FeaturedBooks() {
           <Link to="/books">Browse More Books</Link>
         </Button>
       </div>
+
+      {editingBook && (
+        <EditBook
+          open={!!editingBook}
+          onOpenChange={() => setEditingBook(null)}
+          book={editingBook}
+        />
+      )}
+      {borrowingBook && (
+        <BorrowBook
+          open={!!borrowingBook}
+          onOpenChange={() => setBorrowingBook(null)}
+          book={borrowingBook}
+        />
+      )}
     </section>
   );
 }
