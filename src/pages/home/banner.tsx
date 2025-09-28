@@ -15,40 +15,37 @@ type BannerProps = {
   onAddBook?: () => void;
 };
 
+interface BorrowItem {
+  totalQuantity: number;
+  bookId: string;
+  book: {
+    title: string;
+    isbn: string;
+  };
+}
+
 export default function Banner({
   title = "Welcome to Campus Library",
   subtitle = "Discover, borrow and manage books effortlessly",
-  bgImage,
-  onExplore,
-  onAddBook,
 }: BannerProps) {
   const { data: books, isLoading: booksLoading } = useGetAllBooksQuery({});
   const { data: borrow, isLoading: borrowLoading } = useBorrowSummaryQuery({});
   const [openAddBook, setOpenAddBook] = useState(false);
 
   const totalBooks = books?.data?.length ?? 0;
-  const totalBorrowed =
-    borrow?.data?.reduce((sum, item) => sum + item.totalQuantity, 0) ?? 0;
+  const totalBorrowed = borrow?.data?.reduce(
+    (sum: number, item: BorrowItem) => sum + item.totalQuantity,
+    0
+  );
 
   return (
     <section
       aria-label="Library hero"
       className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-sky-600 via-indigo-600 to-violet-600 text-white p-6 md:p-10 lg:p-12 shadow-lg"
-      style={
-        bgImage
-          ? {
-              backgroundImage: `url(${bgImage})`,
-              backgroundBlendMode: "overlay",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }
-          : undefined
-      }
     >
       <div className="absolute inset-0 bg-gradient-to-r from-black/10 to-white/0 mix-blend-overlay pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
-        {/* Left side */}
         <div className="space-y-4">
           <div className="flex items-center gap-3">
             <Badge className="text-sm py-1 px-2 bg-white/10 border-white/20">
@@ -78,19 +75,12 @@ export default function Banner({
             </Button>
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-4 text-sm text-white/80">
-            <div className="flex items-center gap-2">
-              <strong className="text-white">Total Borrowed</strong>
-              <span>- {borrowLoading ? "…" : totalBorrowed}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <strong className="text-white">Fast loans</strong>
-              <span>- 2 week standard</span>
-            </div>
+          <div className="flex items-center gap-2 mt-4  text-sm text-white/80">
+            <strong className="text-white">Total Borrowed</strong>
+            <span>- {borrowLoading ? "…" : totalBorrowed}</span>
           </div>
         </div>
 
-        {/* Right side: Quick stats */}
         <div className="hidden lg:flex justify-end">
           <div className="w-full max-w-md">
             <Card className="bg-white/6 border-white/10">

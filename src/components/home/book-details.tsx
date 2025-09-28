@@ -19,9 +19,8 @@ export default function BookDetails() {
   const { data: book, isLoading } = useGetSingleBookQuery(id || "");
   const [deleteBook] = useDeleteBookMutation();
 
-  // Local state for modals
-  const [editingBook, setEditingBook] = useState<any | null>(null);
-  const [borrowingBook, setBorrowingBook] = useState<any | null>(null);
+  const [editingBook, setEditingBook] = useState(null);
+  const [borrowingBook, setBorrowingBook] = useState(null);
 
   if (isLoading) return <Loader />;
   if (!book?.data) return <p className="text-center mt-10">Book not found.</p>;
@@ -44,6 +43,7 @@ export default function BookDetails() {
       },
       cancel: {
         label: "Cancel",
+        onClick: () => console.log("Cancelled"),
       },
     });
   };

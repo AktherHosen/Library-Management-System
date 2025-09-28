@@ -29,6 +29,16 @@ const getInitials = (name: string) => {
     ? parts[0][0].toUpperCase()
     : (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 };
+interface Book {
+  _id: string;
+  title: string;
+  author: string;
+  genre: string;
+  isbn: string;
+  copies: number;
+  description?: string;
+  available: boolean;
+}
 
 const SkeletonBookCard = () => (
   <Card className="relative flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow rounded-2xl p-4 animate-pulse">
@@ -64,6 +74,7 @@ const Books = () => {
       },
       cancel: {
         label: "Cancel",
+        onClick: () => console.log("Cancelled"),
       },
     });
   };
@@ -90,7 +101,7 @@ const Books = () => {
             ? Array.from({ length: limit }).map((_, i) => (
                 <SkeletonBookCard key={i} />
               ))
-            : data?.data?.map((book: any) => (
+            : data?.data?.map((book: Book) => (
                 <Card
                   key={book._id}
                   className="flex flex-col justify-between rounded-2xl border border-gray-100 bg-white shadow-md hover:shadow-lg transition-shadow duration-300"

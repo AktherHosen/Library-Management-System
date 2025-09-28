@@ -9,41 +9,79 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export function BookForm({ initialData, onSubmit, isLoading }: any) {
-  const [formData, setFormData] = useState(initialData);
+export interface Book {
+  title: string;
+  author: string;
+  genre: string;
+  isbn: string;
+  copies: number;
+  description?: string;
+  available: boolean;
+}
 
-  useEffect(() => {
-    setFormData(initialData);
-  }, [initialData]);
+export function BookForm({
+  initialData,
+  onSubmit,
+  isLoading,
+}: {
+  initialData?: Partial<Book>;
+  onSubmit: (data: Book) => void;
+  isLoading?: boolean;
+}) {
+  const [formData, setFormData] = useState<Book>({
+    title: initialData?.title || "",
+    author: initialData?.author || "",
+    genre: initialData?.genre || "",
+    isbn: initialData?.isbn || "",
+    copies: initialData?.copies || 1,
+    description: initialData?.description || "",
+    available: initialData?.available ?? true,
+  });
 
-  const handleChange = (field: string, value: any) => {
-    setFormData((prev: any) => ({ ...prev, [field]: value }));
+  const [errors, setErrors] = useState<Partial<Record<keyof Book, string>>>({});
+
+  const handleChange = (field: keyof Book, value: any) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: "" })); // clear error on change
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const newErrors: Partial<Record<keyof Book, string>> = {};
+
+    if (!formData.title.trim()) newErrors.title = "Title is required";
+    if (!formData.author.trim()) newErrors.author = "Author is required";
+    if (!formData.genre.trim()) newErrors.genre = "Genre is required";
+    if (!formData.isbn.trim()) newErrors.isbn = "ISBN is required";
+    if (formData.copies < 1) newErrors.copies = "Copies must be at least 1";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
     onSubmit(formData);
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <Input
-        type="text"
         placeholder="Book Title"
         value={formData.title}
         onChange={(e) => handleChange("title", e.target.value)}
-        required
       />
+      {errors.title && <p className="text-xs text-red-500">{errors.title}</p>}
+
       <Input
-        type="text"
         placeholder="Author"
         value={formData.author}
         onChange={(e) => handleChange("author", e.target.value)}
-        required
       />
-      <div className="flex justify-between items-center gap-4">
+      {errors.author && <p className="text-xs text-red-500">{errors.author}</p>}
+
+      <div className="flex gap-4">
         <Select
           value={formData.genre}
           onValueChange={(value) => handleChange("genre", value)}
@@ -60,21 +98,27 @@ export function BookForm({ initialData, onSubmit, isLoading }: any) {
             <SelectItem value="FANTASY">Fantasy</SelectItem>
           </SelectContent>
         </Select>
+        {errors.genre && <p className="text-xs text-red-500">{errors.genre}</p>}
+
         <Input
           type="number"
           placeholder="Copies"
           value={formData.copies}
           onChange={(e) => handleChange("copies", Number(e.target.value))}
           min={1}
-          required
         />
+        {errors.copies && (
+          <p className="text-xs text-red-500">{errors.copies}</p>
+        )}
       </div>
+
       <Input
-        type="text"
         placeholder="ISBN"
         value={formData.isbn}
         onChange={(e) => handleChange("isbn", e.target.value)}
       />
+      {errors.isbn && <p className="text-xs text-red-500">{errors.isbn}</p>}
+
       <Textarea
         placeholder="Description"
         value={formData.description}
@@ -82,15 +126,17 @@ export function BookForm({ initialData, onSubmit, isLoading }: any) {
         rows={3}
       />
 
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-2">
         <Checkbox
           checked={formData.available}
-          onCheckedChange={(checked) => handleChange("available", checked)}
+          onCheckedChange={(checked) =>
+            handleChange("available", checked ?? false)
+          }
         />
         <span>Available</span>
       </div>
 
-      <Button type="submit" disabled={isLoading} className="w-full">
+      <Button type="submit" className="w-full" disabled={isLoading}>
         {isLoading ? "Saving..." : "Save"}
       </Button>
     </form>

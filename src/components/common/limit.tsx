@@ -6,7 +6,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export const Limit = ({ limit, onChange, options = [4, 8, 12, 16] }) => {
+type LimitProps = {
+  limit: number;
+  onChange: (newLimit: number) => void;
+  options?: number[];
+};
+
+export const Limit = ({
+  limit,
+  onChange,
+  options = [4, 8, 12, 16],
+}: LimitProps) => {
   return (
     <Select
       value={limit.toString()}

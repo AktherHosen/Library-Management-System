@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const lmsApi = createApi({
   reducerPath: "lmsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api",
+    baseUrl: `${import.meta.env.VITE_API_URL}/api`,
   }),
   tagTypes: ["books", "borrow"],
   endpoints: (builder) => ({
@@ -15,13 +15,14 @@ export const lmsApi = createApi({
       }),
       invalidatesTags: ["books"],
     }),
-    getAllBooks: builder.query({
+    getAllBooks: builder.query<any, { page?: number; limit?: number }>({
       query: ({ page = 1, limit = 8 } = {}) => ({
         url: "/books",
         params: { page, limit },
       }),
       providesTags: ["books"],
     }),
+
     getSingleBook: builder.query({
       query: (id) => `/books/${id}`,
       providesTags: ["books"],
@@ -49,7 +50,7 @@ export const lmsApi = createApi({
       }),
       invalidatesTags: ["borrow", "books"],
     }),
-    borrowSummary: builder.query({
+    borrowSummary: builder.query<any, { page?: number; limit?: number }>({
       query: ({ page = 1, limit = 8 } = {}) => ({
         url: "/borrow",
         params: { page, limit },

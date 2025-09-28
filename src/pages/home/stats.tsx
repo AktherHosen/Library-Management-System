@@ -1,5 +1,23 @@
 import { useBorrowSummaryQuery, useGetAllBooksQuery } from "@/redux/api/lmsApi";
 
+interface Book {
+  _id: string;
+  title: string;
+  author: string;
+  genre: string;
+  isbn: string;
+  copies: number;
+  description?: string;
+  available: boolean;
+}
+interface BorrowItem {
+  totalQuantity: number;
+  book: {
+    title: string;
+    isbn: string;
+  };
+}
+
 const Stats = () => {
   const { data: booksData, isLoading: booksLoading } = useGetAllBooksQuery({
     page: 1,
@@ -15,9 +33,16 @@ const Stats = () => {
 
   const totalBooks = booksData?.data?.length || 0;
   const totalCopies =
-    booksData?.data?.reduce((acc, book) => acc + book.copies, 0) || 0;
+    booksData?.data?.reduce(
+      (acc: number, book: Book) => acc + book.copies,
+      0
+    ) || 0;
+
   const borrowedBooks =
-    borrowData?.data?.reduce((acc, item) => acc + item.totalQuantity, 0) || 0;
+    borrowData?.data?.reduce(
+      (acc: number, item: BorrowItem) => acc + item.totalQuantity,
+      0
+    ) || 0;
 
   return (
     <section className="grid grid-cols-2 md:grid-cols-3 gap-6 my-10">

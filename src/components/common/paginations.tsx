@@ -6,8 +6,17 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+type PaginationProps = {
+  page: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+};
 
-export const Paginations = ({ page, totalPages, onPageChange }) => {
+export const Paginations = ({
+  page,
+  totalPages,
+  onPageChange,
+}: PaginationProps) => {
   const goToPage = (p: number) => {
     if (p < 1 || p > totalPages) return;
     onPageChange(p);

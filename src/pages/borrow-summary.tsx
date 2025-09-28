@@ -13,23 +13,12 @@ import {
 import { useBorrowSummaryQuery } from "@/redux/api/lmsApi";
 import { useState } from "react";
 
-interface BorrowSummaryItem {
-  bookId: string;
+interface BorrowItem {
   totalQuantity: number;
+  bookId: string;
   book: {
     title: string;
     isbn: string;
-  };
-}
-
-interface BorrowSummaryResponse {
-  success: boolean;
-  data: BorrowSummaryItem[];
-  pagination: {
-    page: number;
-    limit: number;
-    totalPages: number;
-    total: number;
   };
 }
 
@@ -93,7 +82,7 @@ const BorrowSummary = () => {
                 </TableCell>
               </TableRow>
             ) : (
-              data.data.map((item) => (
+              data.data.map((item: BorrowItem) => (
                 <TableRow
                   key={item.bookId}
                   className="hover:bg-muted/20 transition-colors"
@@ -110,7 +99,7 @@ const BorrowSummary = () => {
         </Table>
       </div>
 
-      <div className="flex justify-self-end  my-4">
+      <div className="flex justify-self-end">
         {data?.pagination && (
           <Paginations
             page={page}

@@ -18,11 +18,23 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
+interface Book {
+  _id: string;
+  title: string;
+  author: string;
+  genre: string;
+  isbn: string;
+  copies: number;
+  description?: string;
+  available: boolean;
+}
+
 export function FeaturedBooks() {
   const { data, isLoading } = useGetAllBooksQuery({ page: 1, limit: 4 });
   const [deleteBook] = useDeleteBookMutation();
   const [editingBook, setEditingBook] = useState<any | null>(null);
   const [borrowingBook, setBorrowingBook] = useState<any | null>(null);
+
   const handleDelete = (id: string) => {
     toast.warning("Are you sure you want to delete this book?", {
       action: {
@@ -39,6 +51,7 @@ export function FeaturedBooks() {
       },
       cancel: {
         label: "Cancel",
+        onClick: () => console.log("Cancelled"),
       },
     });
   };
@@ -46,81 +59,89 @@ export function FeaturedBooks() {
   if (isLoading) return <Loader />;
 
   return (
-    <section className="">
+    <section>
       <SectionTitle
         title="Featured Books"
         subtitle="Check out some of our popular books"
         className="mb-6"
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        {data?.data?.map((book: any) => (
-          <Link
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 items-stretch">
+        {data?.data?.map((book: Book) => (
+          <Card
             key={book._id}
-            to={`/books/${book._id}`}
-            className="block rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-200"
+            className="h-full flex flex-col rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-all duration-200"
           >
-            <Card className="h-full">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-md font-semibold line-clamp-1">
-                  {book.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-col gap-1">
-                <CardDescription className="text-sm text-gray-600 line-clamp-2">
-                  {book.description || "No description available."}
-                </CardDescription>
-                <div className="flex justify-between items-center mt-2">
-                  <div className="flex flex-col">
-                    <p className="text-sm text-gray-500">{book.author}</p>
-                    {book.isbn && (
-                      <p className="text-xs text-gray-400">ISBN: {book.isbn}</p>
-                    )}
-                  </div>
-                  <Badge
-                    variant={book.copies > 0 ? "secondary" : "destructive"}
-                    className="text-xs px-2 py-1"
-                  >
-                    {book.copies > 0 ? "Available" : "Unavailable"}
-                  </Badge>
-                </div>
-              </CardContent>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-md font-semibold line-clamp-1">
+                {book.title}
+              </CardTitle>
+            </CardHeader>
 
-              <CardFooter className="flex flex-wrap gap-2  border-t border-gray-100">
-                <Button
-                  asChild
-                  variant="outline"
-                  className="flex-1 justify-center gap-2"
+            <CardContent className="flex-1 flex flex-col justify-between gap-1">
+              <CardDescription className="text-sm text-gray-600 line-clamp-2">
+                {book.description || "No description available."}
+              </CardDescription>
+
+              <div className="flex justify-between items-center mt-2">
+                <div className="flex flex-col">
+                  <p className="text-sm text-gray-500">{book.author}</p>
+                  {book.isbn && (
+                    <p className="text-xs text-gray-400">ISBN: {book.isbn}</p>
+                  )}
+                </div>
+                <Badge
+                  variant={book.copies > 0 ? "secondary" : "destructive"}
+                  className="text-xs px-2 py-1"
                 >
-                  <Link to={`/books/${book._id}`}>
-                    <Info size={16} /> Details
-                  </Link>
-                </Button>
-                <Button
-                  onClick={() => setEditingBook(book)}
-                  variant="secondary"
-                  className="flex-1 justify-center gap-2"
-                >
-                  <Edit size={16} /> Edit
-                </Button>
-                <Button
-                  onClick={() => handleDelete(book._id)}
-                  variant="destructive"
-                  className="flex-1 justify-center gap-2"
-                >
-                  <Trash2 size={16} /> Delete
-                </Button>
-                <Button
-                  disabled={book.copies === 0}
-                  onClick={() => setBorrowingBook(book)}
-                  variant="default"
-                  className="flex-1 justify-center gap-2"
-                >
-                  <BookOpen size={16} /> Borrow
-                </Button>
-              </CardFooter>
-            </Card>
-          </Link>
+                  {book.copies > 0 ? "Available" : "Unavailable"}
+                </Badge>
+              </div>
+            </CardContent>
+
+            <CardFooter className="flex flex-wrap gap-2 border-t border-gray-100 mt-auto">
+              <Button
+                asChild
+                variant="outline"
+                className="flex-1 justify-center gap-2"
+              >
+                <Link to={`/books/${book._id}`}>
+                  <Info size={16} /> Details
+                </Link>
+              </Button>
+              <Button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setEditingBook(book);
+                }}
+                variant="secondary"
+                className="flex-1 justify-center gap-2"
+              >
+                <Edit size={16} /> Edit
+              </Button>
+              <Button
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleDelete(book._id);
+                }}
+                variant="destructive"
+                className="flex-1 justify-center gap-2"
+              >
+                <Trash2 size={16} /> Delete
+              </Button>
+              <Button
+                disabled={book.copies === 0}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setBorrowingBook(book);
+                }}
+                variant="default"
+                className="flex-1 justify-center gap-2"
+              >
+                <BookOpen size={16} /> Borrow
+              </Button>
+            </CardFooter>
+          </Card>
         ))}
       </div>
 

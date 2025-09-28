@@ -12,14 +12,30 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
+export interface Book {
+  _id: string;
+  title: string;
+  author: string;
+  genre: string;
+  isbn: string;
+  copies: number;
+  description?: string;
+  available: boolean;
+}
+
 type BorrowBookProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  book: any; // shape of book data from API
+  book: Book;
 };
 
+interface BorrowFormData {
+  quantity: number;
+  dueDate: string;
+}
+
 export function BorrowBook({ open, onOpenChange, book }: BorrowBookProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<BorrowFormData>({
     quantity: 1,
     dueDate: "",
   });
@@ -32,7 +48,7 @@ export function BorrowBook({ open, onOpenChange, book }: BorrowBookProps) {
     }
   }, [open, book]);
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: keyof BorrowFormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 

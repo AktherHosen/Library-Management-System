@@ -6,7 +6,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"; // Shadcn Sheet for mobile menu
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { BookOpen, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";

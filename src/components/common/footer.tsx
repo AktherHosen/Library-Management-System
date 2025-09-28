@@ -15,7 +15,6 @@ export function Footer() {
   return (
     <footer className="bg-gradient-to-r rounded-t-2xl from-indigo-50 via-sky-50 to-violet-50 border-t mt-8">
       <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
-        {/* Brand */}
         <div>
           <Link
             to="/"
@@ -31,7 +30,6 @@ export function Footer() {
             platform.
           </p>
 
-          {/* Socials */}
           <div className="flex gap-4 mt-4">
             <Link
               target="_blank"
@@ -64,7 +62,6 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Quick Links */}
         <div>
           <h4 className="font-semibold text-base mb-4 text-gray-800">
             Quick Links
@@ -87,7 +84,6 @@ export function Footer() {
           </ul>
         </div>
 
-        {/* Contact */}
         <div>
           <h4 className="font-semibold text-base mb-4 text-gray-800">
             Contact
