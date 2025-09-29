@@ -6,8 +6,18 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useAddBookMutation } from "@/redux/api/lmsApi";
+import { toast } from "sonner";
 import { BookForm } from "./book-form";
 
+interface BookFormData {
+  title: string;
+  author: string;
+  genre: string;
+  isbn: string;
+  copies: number;
+  description?: string;
+  available: boolean;
+}
 export function AddBook({
   open,
   onOpenChange,
@@ -17,12 +27,14 @@ export function AddBook({
 }) {
   const [addBook, { isLoading }] = useAddBookMutation();
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (formData: BookFormData) => {
     try {
-      await addBook(formData).unwrap();
+      const res = await addBook(formData).unwrap();
+      if (res.success) toast.success(res.message);
       onOpenChange(false);
-    } catch (err) {
-      console.error("Failed to add book:", err);
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err?.data?.message || "Failed to add book");
     }
   };
 

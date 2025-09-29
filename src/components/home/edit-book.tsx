@@ -6,7 +6,21 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useUpdateBookMutation } from "@/redux/api/lmsApi";
+import { toast } from "sonner";
 import { BookForm } from "./book-form";
+
+interface BookFormData {
+  title: string;
+  author: string;
+  genre: string;
+  isbn: string;
+  copies: number;
+  description?: string;
+  available: boolean;
+}
+export interface Book extends BookFormData {
+  _id: string;
+}
 
 export function EditBook({
   open,
@@ -15,16 +29,17 @@ export function EditBook({
 }: {
   open: boolean;
   onOpenChange: (o: boolean) => void;
-  book: any;
+  book: Book;
 }) {
   const [updateBook, { isLoading }] = useUpdateBookMutation();
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (formData: BookFormData) => {
     try {
-      await updateBook({ id: book._id, ...formData }).unwrap();
+      const res = await updateBook({ id: book._id, ...formData }).unwrap();
+      if (res.success) toast.success(res.message);
       onOpenChange(false);
-    } catch (err) {
-      console.error("Failed to update book:", err);
+    } catch (err: any) {
+      toast.error(err?.data?.message || "Failed to edit book");
     }
   };
 

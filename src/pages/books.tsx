@@ -168,7 +168,7 @@ const Books = () => {
                       <Trash2 size={16} /> Delete
                     </Button>
                     <Button
-                      disabled={book.copies === 0}
+                      disabled={book.copies === 0 || !book.available}
                       onClick={() => setBorrowingBook(book)}
                       variant="default"
                       className="flex-1 justify-center gap-2"

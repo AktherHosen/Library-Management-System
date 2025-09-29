@@ -130,7 +130,7 @@ export function FeaturedBooks() {
                 <Trash2 size={16} /> Delete
               </Button>
               <Button
-                disabled={book.copies === 0}
+                disabled={book.copies === 0 || !book.available}
                 onClick={(e) => {
                   e.preventDefault();
                   setBorrowingBook(book);

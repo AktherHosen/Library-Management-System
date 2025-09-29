@@ -10,8 +10,9 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
+import { toast } from "sonner";
 
-export interface Book {
+interface BookFormData {
   title: string;
   author: string;
   genre: string;
@@ -21,16 +22,18 @@ export interface Book {
   available: boolean;
 }
 
+type BookErrors = Partial<Record<keyof BookFormData, string>>;
+
 export function BookForm({
   initialData,
   onSubmit,
   isLoading,
 }: {
-  initialData?: Partial<Book>;
-  onSubmit: (data: Book) => void;
+  initialData?: Partial<BookFormData>;
+  onSubmit: (data: BookFormData) => void | Promise<void>;
   isLoading?: boolean;
 }) {
-  const [formData, setFormData] = useState<Book>({
+  const [formData, setFormData] = useState<BookFormData>({
     title: initialData?.title || "",
     author: initialData?.author || "",
     genre: initialData?.genre || "",
@@ -40,16 +43,16 @@ export function BookForm({
     available: initialData?.available ?? true,
   });
 
-  const [errors, setErrors] = useState<Partial<Record<keyof Book, string>>>({});
+  const [errors, setErrors] = useState<BookErrors>({});
 
-  const handleChange = (field: keyof Book, value: any) => {
+  const handleChange = (field: keyof BookFormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    setErrors((prev) => ({ ...prev, [field]: "" })); // clear error on change
+    setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newErrors: Partial<Record<keyof Book, string>> = {};
+    const newErrors: BookErrors = {};
 
     if (!formData.title.trim()) newErrors.title = "Title is required";
     if (!formData.author.trim()) newErrors.author = "Author is required";
@@ -62,7 +65,24 @@ export function BookForm({
       return;
     }
 
-    onSubmit(formData);
+    try {
+      await onSubmit(formData);
+
+      if (!initialData) {
+        setFormData({
+          title: "",
+          author: "",
+          genre: "",
+          isbn: "",
+          copies: 1,
+          description: "",
+          available: true,
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong while saving the book.");
+    }
   };
 
   return (

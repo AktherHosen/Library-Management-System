@@ -19,6 +19,7 @@ It interacts with a RESTful API and demonstrates **state management, UI design, 
 - 📊 **Borrow Summary** – View aggregated borrowed books
 - 🔄 **Real-time Updates** – Data synced via RTK Query
 - 🎨 **Responsive Design** – Styled with Tailwind CSS
+- 🎨 **Pagination Support** - Pagination support for better user experiences
 - ⚡ **Fast & Type-Safe** – Built with React + TypeScript
 
 ---
