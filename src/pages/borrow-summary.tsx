@@ -99,15 +99,15 @@ const BorrowSummary = () => {
         </Table>
       </div>
 
-      <div className="flex justify-self-end my-4">
-        {data?.pagination && (
+      {data?.pagination && (
+        <div className="flex justify-end my-4">
           <Paginations
             page={page}
             totalPages={data.pagination.totalPages}
             onPageChange={setPage}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
