@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const lmsApi = createApi({
   reducerPath: "lmsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_API_URL}/api`,
+    baseUrl: `${import.meta.env.VITE_API_URL}`,
   }),
   tagTypes: ["books", "borrow"],
   endpoints: (builder) => ({
