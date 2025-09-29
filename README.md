@@ -1,7 +1,7 @@
 # 📚 Campus Library
 
 A **Minimal Library Management System** built with **React**, **TypeScript**, **Redux Toolkit Query (RTK Query)**, **React Router**, and **Tailwind CSS**.  
-This application allows users to view a list of books, perform CRUD operations, borrow books, and view a borrow summary—all without authentication.
+This application allows users to view a list of books, perform CRUD operations, borrow books, and view a borrow summary—all.
 
 ---
 
@@ -43,8 +43,9 @@ src/
 ├── pages/ # Application pages (Books, Home, Summary)
 ├── redux/ # Redux store and API services
 ├── routes/ # React Router DOM routes
-└── App.tsx # Root component
+└── main.tsx # Root component
 ```
+
 ---
 
 ## ⚡ Getting Started
