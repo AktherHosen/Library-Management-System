@@ -37,12 +37,12 @@ It interacts with a RESTful API and demonstrates **state management, UI design, 
 ## Project Structure
 
 campus-library/
-├── src/
-│ ├── components/ # Reusable UI components
-│ ├── pages/ # Application pages (Books, Borrow, Summary)
-│ ├── redux/ # State management (slices, RTK Query API)
-│ ├── routes/ # React Router configuration
-│ ├── types/ # TypeScript type definitions
+src/
+├── components/ # Reusable UI components
+├── pages/ # Application pages (Books, Home, Summary)
+├── redux/ # Redux store and API services
+├── routes/ # React Router DOM routes
+└── App.tsx # Root component
 
 ---
 
@@ -63,6 +63,7 @@ cd campus-library
 # Install dependencies
 npm install
 ```
+
 ```
 npm run dev # Runs on http://localhost:5173
 ```
