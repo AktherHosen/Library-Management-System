@@ -36,14 +36,15 @@ It interacts with a RESTful API and demonstrates **state management, UI design, 
 
 ## Project Structure
 
-campus-library/
+```
+library-management-system/
 src/
 ├── components/ # Reusable UI components
 ├── pages/ # Application pages (Books, Home, Summary)
 ├── redux/ # Redux store and API services
 ├── routes/ # React Router DOM routes
 └── App.tsx # Root component
-
+```
 ---
 
 ## ⚡ Getting Started
